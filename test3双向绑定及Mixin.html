@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+	<title>React双向绑定和Mixin</title>
+</head>
+<body>
+<div id="1"></div>
+    <script src="./react.js"></script>
+    <script src="./react-dom.js"></script>
+    <script src="./browser.min.js"></script>
+    <script type="text/babel">
+	var BindingMixin = {
+		hangdleChange : function (key){
+			var that = this
+            return function (event){
+            	var newState = {}
+            	newState[key] = event.target.value
+            	that.setState(newState)
+            }
+		}
+	};
+
+    var BindingExample = React.createClass({
+    	mixins : [BindingMixin],
+         getInitialState :function(){
+               return {
+               	text : "",
+               	textsecond : ""
+               }
+         },
+         render:function (){
+         	return <div>
+         	<input type="text" placeholder="第一个输入框" onChange={this.hangdleChange("text")}/>
+         	<input type="text" placeholder="第二个输入框" onChange={this.hangdleChange("textsecond")}/>
+            <p>{this.state.text}</p>
+            <p>{this.state.textsecond}</p>
+         	</div>
+            
+         }
+    });    
+
+    ReactDOM.render(<BindingExample></BindingExample>,document.getElementById('1'));
+    </script>
+</body>
+</html>

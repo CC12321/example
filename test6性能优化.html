@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+	<title>test6性能优化</title>
+</head>
+<body>
+<div id="1"></div>
+    <script src="./react-with-addons.min.js"></script>
+    <script src="./react-dom.js"></script>
+    <script src="./browser.min.js"></script>
+    <script type="text/babel">
+var NumberDiv = React.createClass({
+	getInitialState : function (){
+		return {
+			number : this.props.number,
+		}
+	},
+	render : function (){
+		var style={
+			height : "100px",
+			width : "100px",
+			float : "left",
+			margin : "10px",
+			backgroundColor : "gray",
+		}
+		var chooseStyle = {
+			height : "100px",
+			width : "100px",
+			float : "left",
+			margin : "10px",
+			backgroundColor : "red",
+		}
+		return <div style={this.props.chooseNumber == this.state.number ? chooseStyle : style}>
+		{this.state.number}
+		</div>
+	}
+});
+ var ChooseNumber = React.createClass({
+ 	getInitialState: function (){
+ 		return {
+ 			inputNumber : -1 ,
+ 			lastNumber : 1,
+ 		}
+ 	},
+ 	handleChange: function (e){
+ 		if(parseInt(e.target.value) !== this.state.inputNumber){
+ 			this.setState({
+ 				inputNumber:e.target.value,
+ 				lastNumber:this.state.inputNumber,
+ 			})
+ 		}
+ 	},
+ 	render: function (){
+ 		var inputStyle = {
+ 			display:"block",
+ 			clear:"both",
+ 			width:"200px",
+ 			marginBottom:"10px",
+ 		}
+ 		var children = []
+ 		for(var i = 0; i < 40000; i++){
+ 			children.push(<NumberDiv key={i} chooseNumber={this.state.inputNumber} number={i}></NumberDiv>)
+ 		}
+ 		return <div>
+ 		<p>输入数字，对应框会变红,未优化，对应框反应需0.5S，因为React父组件更新引发全部子组件更新</p>
+ 		<input style={inputStyle} type="text" placeholder="请输入一个数字" onChange={this.handleChange} />
+ 		{children}
+ 		</div>
+ 	}
+ });
+ ReactDOM.render(<ChooseNumber></ChooseNumber>,
+ 	document.getElementById("1"));
+
+
+</script>
+</body>
+</html>

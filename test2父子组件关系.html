@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+	<title>父子组件关系实现 </title>
+
+</head>
+<body>
+<div id="1">
+</div>
+    <script src="./react.js"></script>
+    <script src="./react-dom.js"></script>
+    <script src="./browser.min.js"></script>
+    <script type="text/babel">
+    var GenderSelect = React.createClass({//子组件
+    	render: function (){
+    		return <select onChange={this.props.handleSelect}>
+    		<option  value="0">男</option>
+    		<option  value="1">女</option>
+    		</select>
+    	},
+    });
+
+    var SignForm = React.createClass({//父组件
+    	getInitialState: function (){
+    		return {
+    			name:"",
+    			password:"",
+    			gender:"",
+    		}
+    	},
+    	handleChange:function (name,event){
+    		var newState = {}
+    		newState[name] = event.target.value
+    		this.setState(newState)
+    	},
+        handleSelect:function (event){
+        	this.setState({gender:event.target.value})
+        },
+        render:function(){
+        	console.log(this.state)
+        	return <form>
+            <input type="text" placeholder="请输入用户名" onChange={this.handleChange.bind(this,"name")} />
+            <input type="password" placeholder="请输入密码" onChange={this.handleChange.bind(this,"password")} />
+            <GenderSelect handleSelect={this.handleSelect}></GenderSelect>
+            <p>信息将输出到控制台</p>
+        	</form>
+
+        },
+    });
+      ReactDOM.render(<SignForm></SignForm>,document.getElementById('1'));
+
+    </script>
+</body>
+</html>
