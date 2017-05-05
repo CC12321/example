@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+	<title>简化评论框Model</title>
+</head>
+<body>
+<div id="1">
+</div>
+    <script src="./react.js"></script>
+    <script src="./react-dom.js"></script>
+    <script src="./browser.min.js"></script>
+    <script type="text/babel">
+       var Content = React.createClass({//内容组件子组件
+        getInitialState:function(){
+          return {
+            inputText:"",
+          };
+        },
+        handleChange:function(event){
+            this.setState({inputText:event.target.value});
+        },
+        handleSubmit : function(){
+            if(this.props.selectName != "楼主"){
+                 alert("对"+this.props.selectName+"回答:"+ "\n" + this.state.inputText);
+            }else{
+                 alert("对楼主回答:"+ "\n" + this.state.inputText);
+            }
+            
+        },
+       	render:  function (){
+       		return <div><textarea onChange={this.handleChange} placeholder="请说些什么。。。"></textarea>
+         <button onClick={this.handleSubmit}>submit</button>
+          </div>;
+          
+       	},
+       });
+       var Comment = React.createClass({//评论框组建父组件
+        getInitialState:function (){
+              return {
+                names:["楼主","Tim","John","Hank"],
+                selectName :'',
+              }
+        },
+        handleSelect:function (event){
+             this.setState({selectName : event.target.value});
+        },
+        render: function (){
+            var options = [];
+            var i = 0;
+            for(var option in this.state.names){
+              options.push(<option key={i} value={this.state.names[option]}>{this.state.names[option]}</option>);
+              i++;
+            }
+         		return <div>
+                   <select onChange={this.handleSelect}>
+                       {options}
+                   </select>
+                   <Content selectName={this.state.selectName}></Content>
+                   </div>;
+         	},
+       });
+     ReactDOM.render(<Comment></Comment>,document.getElementById('1'));
+    </script>
+</body>
+</html>
